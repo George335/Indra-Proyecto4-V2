@@ -44,14 +44,26 @@ export class HomeComponent implements OnInit {
   nuevasCanciones: any[] = [];
   loading: boolean;
 
+  error: boolean;
+  mensajeError: string;
+
   constructor( private spotify: SpotifyService ) {
 
     this.loading = true;
+    this.error = false;
 
     this.spotify.getNewReleases()
         .subscribe( (data: any) => {
           this.nuevasCanciones = data;
           this.loading = false;
+        }, ( errorServicio ) => {
+          this.loading = false;
+          this.error = true;
+          console.log(errorServicio);
+          // console.log(errorServicio.error.error.message);
+
+          //error.error.message => Se encuentra en la URL
+          this.mensajeError = errorServicio.error.error.message;
         });
   }
 
